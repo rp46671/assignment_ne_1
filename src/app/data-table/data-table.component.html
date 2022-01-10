@@ -1,0 +1,227 @@
+<h1 class="text-center">
+  Assignment
+
+</h1>
+
+<p><strong>Questions</strong> Create a web application using angular
+  Fetch the posts from the API and show them.
+  Include the functionalities like create, update and delete
+  You can use any design.
+  user should be able to search and filter the posts (local filter is fine)
+  API for fetch: https://jsonplaceholder.typicode.com/posts
+
+</p>
+
+<div class="row">
+  <div class="col-md-12 border-bottom  mb-1 pb-2">
+    <button type="button" class="btn btn-secondary " (click)="confirmAddModal(modalAddData)" style="float: right;">Add
+      Some Data </button>
+
+  </div>
+
+  <div class="col-md-12 mt-3 row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" [(ngModel)]="searchTitle" name="Title" placeholder="Title" class="form-control">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="body">Body</label>
+        <input type="text" [(ngModel)]="searchBody" name="body" placeholder="Body" class="form-control">
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="body">User Id</label>
+        <input type="number"  [(ngModel)]="searchuserId"name="userId" placeholder="User Id" class="form-control">
+      </div>
+    </div>
+
+    <div class="col-md-3 ">
+      <div class="d-flex justify-content-between mt-3">
+      <button type="button" class="btn btn-primary btn-sm pr-2 "
+              (click)="filterData()">Filter </button>
+
+              <button type="button" class="btn btn-danger btn-sm pr-2 "
+              (click)="clearFiltler()">Clear </button>
+    </div>
+
+  </div>
+  </div>
+  <div class="col-md-12 mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Body</th>
+          <th scope="col">User Id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of dataList2 ">
+          <th scope="row">{{data.id}}</th>
+          <td>{{data.title}}</td>
+          <td>{{data.body}}</td>
+          <td>{{data.userId}}</td>
+          <td>
+            <button type="button" class="btn btn-primary btn-sm pr-2 "
+              (click)="confirmEditModal(modalEditData ,data)">Edit</button>
+            <button type="button" class="btn btn-danger btn-sm mt-2" (click)="deleteValue(data.id)">Delete</button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+
+
+<ng-template #modalEditData let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Edit Data Table</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="editDataForm">
+      <div class="card mb-2">
+        <div class="card-body  ">
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="editTitle" class="form-label">Title<span style="color: red;">*</span></label>
+              <textarea rows="3" cols="4" class="form-control form-control-sm " id="editTitle"
+                formControlName="editTitle" placeholder="Title"
+                [class.is-invalid]="editTitle?.invalid && editTitle?.touched"
+                [class.is-valid]="editTitle?.valid && editTitle?.touched"></textarea>
+
+              <div *ngIf="editTitle?.invalid && editTitle?.touched">
+                <small class="text-danger" *ngIf="editTitle?.errors?.required">Title
+
+                  is required</small>
+              </div>
+
+            </div>
+            <div class="form-group col-md-12">
+              <label for="editBody" class="form-label">Body<span style="color: red;">*</span></label>
+              <input type="text" class="form-control form-control-sm " id="editBody" formControlName="editBody"
+                placeholder="Body" [class.is-invalid]="editBody?.invalid && editBody?.touched"
+                [class.is-valid]="editBody?.valid && editBody?.touched">
+
+              <div *ngIf="editBody?.invalid && editBody?.touched">
+                <small class="text-danger" *ngIf="editBody?.errors?.required">Body
+
+                  is required</small>
+              </div>
+
+            </div>
+            <div class="form-group col-md-12">
+              <label for="editUser_Id" class="form-label">User Id <span style="color: red;">*</span></label>
+              <input type="number" class="form-control form-control-sm " id="name" formControlName="editUser_Id"
+                placeholder="Enter User Id " [class.is-invalid]="editUser_Id?.invalid && editUser_Id?.touched"
+                [class.is-valid]="editUser_Id?.valid && editUser_Id?.touched">
+
+              <div *ngIf="editUser_Id?.invalid && editUser_Id?.touched">
+                <small class="text-danger" *ngIf="editUser_Id?.errors?.required">
+                  User Id is Required</small>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="editDataForm?.invalid" ngbAutofocus class="btn btn-primary mr-2 mb-2 mb-md-0 "
+      (click)="modal.close('Ok',$event)">Update</button>
+    <button type="button" class="btn btn btn-danger mr-2 mb-2 mb-md-0 " (click)="deleteValue(editValue.Id)"
+      (click)="modal.dismiss('cancel')">Delete</button>
+    <button type="button" class="btn btn btn-outline-primary mr-2 mb-2 mb-md-0 "
+      (click)="modal.dismiss('cancel')">Close</button>
+
+  </div>
+</ng-template>
+<ng-template #modalAddData let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Add Data Table</h4>
+    <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+      (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="addDataFrom">
+      <div class="card mb-2">
+        <div class="card-body  ">
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="addTitle" class="form-label">Title<span style="color: red;">*</span></label>
+              <textarea rows="3" cols="4" class="form-control form-control-sm " id="addTitle" formControlName="addTitle"
+                placeholder="Title" [class.is-invalid]="addTitle?.invalid && addTitle?.touched"
+                [class.is-valid]="addTitle?.valid && addTitle?.touched"></textarea>
+
+              <div *ngIf="addTitle?.invalid && addTitle?.touched">
+                <small class="text-danger" *ngIf="addTitle?.errors?.required">Title
+
+                  is required</small>
+              </div>
+
+            </div>
+            <div class="form-group col-md-12">
+              <label for="addBody" class="form-label">Body<span style="color: red;">*</span></label>
+              <input type="text" class="form-control form-control-sm " id="addBody" formControlName="addBody"
+                placeholder="Body" [class.is-invalid]="addBody?.invalid && addBody?.touched"
+                [class.is-valid]="addBody?.valid && addBody?.touched">
+
+              <div *ngIf="addBody?.invalid && addBody?.touched">
+                <small class="text-danger" *ngIf="addBody?.errors?.required">Body
+
+                  is required</small>
+              </div>
+
+            </div>
+            <div class="form-group col-md-12">
+              <label for="addUser_Id" class="form-label">User Id <span style="color: red;">*</span></label>
+              <input type="number" class="form-control form-control-sm " id="name" formControlName="addUser_Id"
+                placeholder="Enter User Id " [class.is-invalid]="addUser_Id?.invalid && addUser_Id?.touched"
+                [class.is-valid]="addUser_Id?.valid && addUser_Id?.touched">
+
+              <div *ngIf="addUser_Id?.invalid && addUser_Id?.touched">
+                <small class="text-danger" *ngIf="addUser_Id?.errors?.required">
+                  User Id is Required</small>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="addDataFrom?.invalid" ngbAutofocus class="btn btn-primary mr-2 mb-2 mb-md-0 "
+      (click)="modal.close('Ok',$event)">Update</button>
+
+    <button type="button" class="btn btn btn-outline-primary mr-2 mb-2 mb-md-0 "
+      (click)="modal.dismiss('cancel')">Close</button>
+
+  </div>
+</ng-template>
