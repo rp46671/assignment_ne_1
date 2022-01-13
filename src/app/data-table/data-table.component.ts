@@ -129,15 +129,23 @@ export class DataTableComponent implements OnInit {
       id: this.dataList2[this.dataList2.length - 1].id + 1,
       title: this.addTitle?.value,
       userId: this.addUser_Id?.value
-    })
+    });
+    this.dataList=this.dataList2;
+  }
+
+
+  clearFiltler() {
+    this.searchuserId = null;
+    this.searchBody = null;
+    this.searchTitle = null;
+    this.dataList2 = this.dataList;
   }
 
   filterData() {
     if (this.searchTitle) {
-      this.dataList2 = this.dataList.filter(data => data.title == this.searchTitle)
+      this.dataList2 = this.dataList.filter(word => word.title.toLowerCase().replace(/\n/gi, ' ').indexOf(this.searchTitle.toLowerCase().replace(/\n/gi, ' ')) > -1);
     } else if (this.searchBody) {
-      console.log("this.dataList",this.dataList)
-      this.dataList2 = this.dataList.filter(word => word.body.toLowerCase().indexOf(this.searchBody.toLowerCase()) > -1);
+      this.dataList2 = this.dataList.filter(word => word.body.toLowerCase().replace(/\n/gi, ' ').indexOf(this.searchBody.toLowerCase().replace(/\n/gi, ' ')) > -1);
     }
     else if (this.searchuserId) {
       console.log(this.searchuserId)
@@ -147,11 +155,5 @@ export class DataTableComponent implements OnInit {
       this._blankValue = " No Data Found"
       console.log(" No Data Found")
     }
-  }
-  clearFiltler() {
-    this.searchuserId = null;
-    this.searchBody = null;
-    this.searchTitle = null;
-    this.dataList2 = this.dataList;
   }
 }

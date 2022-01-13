@@ -144,15 +144,21 @@ var DataTableComponent = /** @class */ (function () {
             title: (_b = this.addTitle) === null || _b === void 0 ? void 0 : _b.value,
             userId: (_c = this.addUser_Id) === null || _c === void 0 ? void 0 : _c.value
         });
+        this.dataList = this.dataList2;
+    };
+    DataTableComponent.prototype.clearFiltler = function () {
+        this.searchuserId = null;
+        this.searchBody = null;
+        this.searchTitle = null;
+        this.dataList2 = this.dataList;
     };
     DataTableComponent.prototype.filterData = function () {
         var _this = this;
         if (this.searchTitle) {
-            this.dataList2 = this.dataList.filter(function (data) { return data.title == _this.searchTitle; });
+            this.dataList2 = this.dataList.filter(function (word) { return word.title.toLowerCase().replace(/\n/gi, ' ').indexOf(_this.searchTitle.toLowerCase().replace(/\n/gi, ' ')) > -1; });
         }
         else if (this.searchBody) {
-            console.log("this.dataList", this.dataList);
-            this.dataList2 = this.dataList.filter(function (word) { return word.body.toLowerCase().indexOf(_this.searchBody.toLowerCase()) > -1; });
+            this.dataList2 = this.dataList.filter(function (word) { return word.body.toLowerCase().replace(/\n/gi, ' ').indexOf(_this.searchBody.toLowerCase().replace(/\n/gi, ' ')) > -1; });
         }
         else if (this.searchuserId) {
             console.log(this.searchuserId);
@@ -163,12 +169,6 @@ var DataTableComponent = /** @class */ (function () {
             this._blankValue = " No Data Found";
             console.log(" No Data Found");
         }
-    };
-    DataTableComponent.prototype.clearFiltler = function () {
-        this.searchuserId = null;
-        this.searchBody = null;
-        this.searchTitle = null;
-        this.dataList2 = this.dataList;
     };
     DataTableComponent = __decorate([
         core_1.Component({
